@@ -5,8 +5,9 @@ std::shared_ptr<Camera> Assignment7::CreateCamera() const
 {
     const glm::vec2 resolution = GetImageOutputResolution();
     std::shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(resolution.x / resolution.y, 26.6f);
-    camera->SetPosition(glm::vec3(0.f, -4.1469f, 0.73693f));
-    camera->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
+	camera->SetPosition(glm::vec3(6.916f, 9.34f, 10.649f));
+	camera->Rotate(glm::vec3(1.f, 0.f, 0.f), -0.6342f);
+	camera->Rotate(glm::vec3(0.f, 1.f, 0.f), 0.5760f);
     return camera;
 }
 
@@ -29,7 +30,7 @@ std::shared_ptr<Scene> Assignment7::CreateScene() const
 
     // Objects
     std::vector<std::shared_ptr<aiMaterial>> loadedMaterials;
-    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("CornellBox/CornellBox-Assignment7-Alt.obj", &loadedMaterials);
+    std::vector<std::shared_ptr<MeshObject>> cubeObjects = MeshLoader::LoadMesh("test.obj", &loadedMaterials);
     for (size_t i = 0; i < cubeObjects.size(); ++i) {
         std::shared_ptr<Material> materialCopy = cubeMaterial->Clone();
         materialCopy->LoadMaterialFromAssimp(loadedMaterials[i]);
@@ -37,7 +38,8 @@ std::shared_ptr<Scene> Assignment7::CreateScene() const
 
         std::shared_ptr<SceneObject> cubeSceneObject = std::make_shared<SceneObject>();
         cubeSceneObject->AddMeshObject(cubeObjects[i]);
-        cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
+		// cubeSceneObject->Rotate(glm::vec3(1.f, 0.f, 0.f), PI / 2.f);
+		cubeSceneObject->MultScale(0.5);
 
         cubeSceneObject->CreateAccelerationData(AccelerationTypes::BVH);
         cubeSceneObject->ConfigureAccelerationStructure([](AccelerationStructure* genericAccelerator) {
@@ -67,7 +69,7 @@ std::shared_ptr<Scene> Assignment7::CreateScene() const
     UniformGridAcceleration* accelerator = dynamic_cast<UniformGridAcceleration*>(newScene->GenerateAccelerationData(AccelerationTypes::UNIFORM_GRID));
     assert(accelerator);
     // Assignment 7 Part 2 TODO: Change the glm::ivec3(10, 10, 10) here.
-    accelerator->SetSuggestedGridSize(glm::ivec3(10, 10, 10));
+    accelerator->SetSuggestedGridSize(glm::ivec3(3, 3, 3));
 #endif    
     newScene->AddLight(pointLight);
 
